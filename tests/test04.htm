@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>My first Vue page</title>
+</head>
+<body>
+    <div id="app">
+        <p>{{ "Moose count: " + count }}</p>
+        <button v-on:click="count++">Count moose</button>
+      </div>
+      
+      <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+      <script>
+        const app = Vue.createApp({
+          data() {
+            return {
+              count: 0
+            }
+          }
+        })
+       app.mount('#app')
+      </script>
+</body>
+</html>

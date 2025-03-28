@@ -1,0 +1,321 @@
+- The v-bind directive
+The v-bind directive lets us bind an HTML attribute to data in the Vue instance. This makes it easy to chage the attribute value dynamically.
+
+<div v-bind:[attribute]="[Vue data]"></div>
+
+Example:
+
+<img v-bind:src="url">
+
+Bind style
+
+<div v-bind:style="{ fontSize: size }">
+    Text Example
+</div>
+
+also
+
+<div v-bind:style="{ fontSize: size + 'px' }">
+    Text Example
+</div>
+
+also (not recommended)
+
+<div v-bind:style="{ 'fontSize': size + 'px' }">
+    Text Example
+</div>
+
+Another property
+
+<div v-bind:style="{ backgroundColor: 'hsl('+bgVal+'80%,80%}">
+    Notice the background color on this div tag.
+</div>
+
+The background color is set with a JavaScript conditional (ternary) expression depending on whether the 'isImportant' data property value is 'true' or 'false'.
+
+<div v-bind:style="{ backgroundColor: isImportant ? 'lightcoral' : 'lighgray' }">
+    Conditional background color.
+</div>
+
+Bind class
+The class name is taken from the 'className' Vue data property:
+
+<div v-bind:class="className">
+    The class is set with Vue.
+</div>
+
+The value of v-bind:class can also be and object, where the class name will only take effect if it is set to 'true':
+
+<div v-bind:class="{ myClass: true }">
+    The class is set conditionally to change the background color.
+</div>
+
+When the calue of v-bind:class is an object, the class can be assigned depending on a Vue property:
+
+<div v-bind:class="{ myClass: isImportant }">
+    The class is set conditionally to change the background color.
+</div>
+
+Shorthand for v-bind
+The shorthand for 'v-bind:' is simply ':'.
+
+<div :class="{ impClass: isImportant }">
+    The Class is set conditionally to change the background color.
+</div>
+
+Vue v-if directive
+
+It is a lot easier to create an HTML element depending on an condition in Vue with the v-if directive than with plain JavaScript.
+
+With Vue you just write the if-statement directly in the HTML element you want to create conditionally.
+
+Conditional rendering in Vue
+Conditional rendering in Vue is done by using the v-if, v-else-if and v-else directives.
+
+<p v-if="typeWritersInStock">
+    in stock
+</p>
+
+<p v-else>
+    not in stock
+</p>
+
+Conditions in Vue
+A condition, or "if-statement", is something that is either true or false.
+
+A condition is often a comparison check between two values like in the example above to see if one value is greater than the other.
+
+We use comparison operators like <, >= or !== to do such checks.
+
+Comparison checks can also be combined with logical operators such as && or ||.
+
+Go to our JavaScript tutorial page to find out more about JavaScript comparisons.
+
+<p v-if="typeWritersInStock > 0">
+    in stock
+</p>
+
+<p v-else>
+    not in stock
+</p>
+
+Directives for conditional rendering
+
+<p v-if="typewriterCount>3">
+  In stock
+</p>
+
+<p v-else-if="typewriterCount>0">
+  Very few left!
+</p>
+
+<p v-else>
+  Not in stock
+</p>
+
+Use the return value from a function
+
+If a certain text contains the word 'pizza', create <p> tag with an appropriate message. The 'include()' method is a native JavaScript method that checks if a text contain certain words.
+
+<div id="app">
+    <p v-if="text.includes('pizza')">The text includes the word 'pizza'</p>
+    <p v-else>The word 'pizza' is not found in the text</p>
+</div>
+
+data(){
+    return{
+        text: 'I like taco, pizza, Thai beef salad, pho soup and tagine.'
+    }
+}
+
+The example above can be expanded to show that v-if also can create other tags like <div> and <img> tags:
+
+<div id="app">
+  <div v-if="text.includes('pizza')">
+    <p>The text includes the word 'pizza'</p>
+    <img src="img_pizza.svg">
+  </div>
+  <p v-else>The word 'pizza' is not found in the text</p>
+</div>
+
+<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+<script>
+  const app = Vue.createApp({
+    data() {
+      return {
+        text: 'I like taco, pizza, Thai beef salad, pho soup and tagine.'
+      }
+    }
+  })
+  app.mount('#app')
+</script>
+
+also
+
+<div id="app">
+  <div v-if="text.includes('pizza')">
+    <p>The text includes the word 'pizza'</p>
+    <img src="img_pizza.svg">
+  </div>
+  <div v-else-if="text.includes('burrito')">
+    <p>The text includes the word 'burrito', but not 'pizza'</p>
+    <img src="img_burrito.svg">
+  </div>
+  <p v-else>The words 'pizza' or 'burrito' are not found in the text</p>
+</div>
+
+<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+<script>
+  const app = Vue.createApp({
+    data() {
+      return {
+        text: 'I like taco, pizza, Thai beef salad, pho soup and tagine.'
+      }
+    }
+  })
+  app.mount('#app')
+</script>
+
+- Vue v-show Directives
+Conditional visibility
+The v-show directive hides an element when the condition is 'false' by setting the CSS 'display' property value to 'none'.
+
+After writing v-show as an HTML attribute we must give a condition to decide to have the tag visile or not.
+
+<div v-show="showDiv"> This div tag can be hidden</div>
+
+Display the <div> element only if the showDiv property is set to 'true'.
+
+<div id="app">
+  <div v-show="showDiv">This div tag can be hidden</div>
+</div>
+
+<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+<script>
+  const app = Vue.createApp({
+    data() {
+      return {
+        showDiv: true
+      }
+    }
+  })
+  app.mount('#app')
+</script>
+
+v-show vs. v-if
+The difference between v-show and v-if is that v-if creates (renders) the element depending on the condition, but with v-show the element is already created, v-show only changes its visibility.
+
+Therefore, it is better to use v-show when switching visibility of an object, because it is easier for the browser to do, and it can lead to a faster response and better user experience.
+
+A reason for using v-if over v-show is that v-if can be used with v-else-if and v-else.
+
+<div id="app">
+  <div v-show="showDiv">Div tag with v-show</div>
+  <div v-if="showDiv">Div tag with v-if</div>
+</div>
+
+<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+<script>
+  const app = Vue.createApp({
+    data() {
+      return {
+        showDiv: true
+      }
+    }
+  })
+  app.mount('#app')
+</script>
+
+- Vue v-for directive
+With Vue you start with the HTML element you want to create into a list, with v-for as an attribute, refer to the array inside the Vue instance, and let Vue take care of the rest. And the elements created with v-for will automatically update when the array changes.
+
+List rendering
+List rendering in Vue is done by using the v-for directive, so that several HTML elements are created with a for-loop.
+
+<ol>
+    <li v-for="x in manyFoods">{{ x }}</li>
+</ol>
+
+Loop through an array
+
+Show images of food, based on an array in the Vue instance.
+
+<div>
+    <img v-for="x in manyFoods" v-bind:src="x">
+</div>
+
+Loop through array of objects
+
+<div>
+    <figure v-for="x in manyFoods">
+        <img v-bind:src="x.url">
+        <figcaption>{{ x.name }}</figcaption>
+    </figure>
+</div>
+
+
+Get the index
+The index number of an array element can be really useful in JavaScript for-loops. Luckily we can get the index number when using v-for in Vue as well.
+
+To get the index number with v-for we need to give two comma separated words in parentheses: the first word will be the array element, and the second word will be the index of that array element.
+
+<p v-for="(x, index) in manyFoods">
+    {{ index }}: "{{ x }}" <br>
+</p>
+
+We can also display both array element index and information from the array element itself, if the array elements are objects:
+
+<p v-for="(x, index) in manyFoods">
+    {{ index }}: "{{ x.name }}", url: "{{ x.url }}" <br>
+</p>
+
+Vue events
+Event handling in Vue is done with the v-on directive, so that we can make something happen when for example a button is clicked.
+
+Event handling is when HTML elements are set up to run a certain code when a certain event happens.
+
+Events in Vue are easy to use and will make our page truly reponsive.
+
+Vue methods are code that can be set up to run when an event happens.
+
+With v-on modifiers you can describe in more detail how to react to an event.
+
+Get start with events
+Click the button to count one more moose in the forest. The count property increases each time the button is clicked.
+
+<div id="app">
+  <img src="img_moose.jpg">
+  <p>{{ "Moose count: " + count }}</p>
+  <button v-on:click="count++">Count moose</button>
+</div>
+
+<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+<script>
+  const app = Vue.createApp({
+    data() {
+      return {
+        count: 0
+      }
+    }
+  })
+ app.mount('#app')
+</script>
+
+Note: A benefit that comes with Vue is that the number of moose in the <p> tag is updated automatically. With plain JavaScript we would need to update the number the user sees with an additional line of code.
+
+Events
+There are lots of events we can use as triggers for running code, among the most common ones are: click, mouseover, mouseout, keydown and input.
+
+v-on
+The v-on directive allows usto create pages that respond to what the user does.
+
+The Vue v-on works by telling the browser what event to listen to, and what to do when that event occurs.
+
+Methods
+If we want to run more complex code when an event occurs we can put the code in a Vue method and refer to this method from the HTML attribute, like this:
+
+<p v-on:click="changeColor">Click me</p>
+
+Event Modifiers
+In addition to v-on and Vue methods we can use something called event modifiers to modify an event so that it for example only happens once after a page is loaded, or modify an event like 'submit' to prevent a form from being submitted.
+
