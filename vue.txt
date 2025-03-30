@@ -428,3 +428,436 @@ The shorthand for 'v-on' is simply '@'.
 
 <button @:click="lihgtOn = !lightOn">Switch light</button>
 
+- Vue methods
+Vue methods are functions that belong to the Vue istance under the 'methods' property. They are great to use with event handling (v-on) to do more complex things. They can also be used to do other things than event handling.
+
+The Vue methods property
+We have already used on Vue property in this tutorial, the 'data' property, where we can store values.
+
+There is another Vue property called 'methods' where we can store functions that belong to the Vue instance. A method can be stored in the Vue instance like this:
+
+const app = Vue.createApp({
+  data() {
+    return {
+      text: ''
+    }
+  },
+  methods: {
+    writeText() {
+      this.text = 'Hello world!'
+    }
+  }
+})
+
+Tip: We need to write this. as prefix to refer to a data property from inside a method.
+
+To call the 'writeText' method when we click the <div> element we can write the code below:
+
+<div v-on:click="writeText"></div>
+
+The v-on directives is used on the <div> element to listen to the click event. When the click event occurs the writeText method is called and the text is changed.
+
+<div id="app">
+  <p>Click on the box below:</p>
+  <div v-on:click="writeText">
+    {{ text }}
+  </div>
+</div>
+
+<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+<script>
+  const app = Vue.createApp({
+    data() {
+      return {
+        text: ''
+      }
+    },
+    methods: {
+      writeText() {
+        this.text = 'Hello world!'
+      }
+    }
+  })
+  app.mount('#app')
+</script>
+
+Call a method with the event object
+
+When an event occurs so that a method is called, the event object is passed with the method by default. This is very convenient because the event object contains a lot of useful data, like for example the target object, the event type, or the mouse position when the click or mousemove event ocurred.
+
+<div id="app">
+  <p>Move the mouse pointer over the box below:</p>
+  <div v-on:mousemove="mousePos"></div>
+</div>
+
+<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+<script>
+  const app = Vue.createApp({
+    data() {
+      return {
+        xPos: 0,
+        yPos: 0
+      }
+    },
+    methods: {
+      mousePos(event) {
+        this.xPos = event.offsetX
+        this.yPos = event.offsetY
+      }
+    }
+  })
+  app.mount('#app')
+</script>
+
+The difference here from the example above is that the background color is bound to xPos with v-bind so that hsl 'hue' value is set equal to xPos.
+
+<div v-on:mousemove="mousePos"
+      v-bind:style="{backgroundColor: 'hsl('+xPost+',80%,80%')}">
+</div>
+
+In the example below the event object carries a text from the <textarea> tag to make it look like we are writing inside a notebook.
+
+<div id="app">
+  <textarea v-on:input="writeText" placeholder="Start writing.."></textarea>
+  <span>{{ text }}</span>
+</div>
+
+<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+<script>
+  const app = Vue.createApp({
+    data() {
+      return {
+        text: ''
+      }
+    },
+    methods: {
+      writeText(event) {
+        this.text = event.target.value
+      }
+    }
+  })
+  app.mount('#app')
+</script>
+
+Passing arguments
+
+<button v-on:click="addMoose(5)">+5</button>
+
+methods:{
+  addMoose(number){
+    this.count = this.count + number
+  }
+}
+
+<div id="app">
+  <img src="img_moose.jpg">
+  <p>{{ "Moose count: " + count }}</p>
+  <button v-on:click="addMoose(+1)">+1</button>
+  <button v-on:click="addMoose(+5)">+5</button>
+  <button v-on:click="addMoose(-1)">-1</button>
+</div>
+
+<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+<script>
+  const app = Vue.createApp({
+    data() {
+      return {
+        count: 0
+      }
+    },
+    methods: {
+      addMoose(number) {
+        this.count+=number
+      }
+    }
+  })
+  app.mount('#app')
+</script>
+
+Passing both an Argument and The Event Object
+If we want to pass both the event object and another argument, there is a reserved name $event we can use where the method is called, like this:
+
+<button v-on:click="addAnimal($event, 5)">+5</button>
+
+methods:{
+  addAnimal(e, number){
+    if(e.target.parentElement.id==="tigers"){
+      this.tigers = this.tigers + number
+    }
+  }
+}
+
+<div id="app">
+  <img src="img_tiger.jpg"
+        id="tiger"
+        v-on:click="myMethod($event, 'Hello')">
+  <p>"{{ msgAndId }}"</p>
+</div>
+
+<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+<script>
+  const app = Vue.createApp({
+    data() {
+      return {
+        msgAndId: ''
+      }
+    },
+    methods: {
+      myMethod(e, msg) {
+        this.msgAndId = msg + ', '
+        this.msgAndId += e.target.id
+      }
+    }
+  })
+  app.mount('#app')
+</script>
+
+- Vue event modifiers
+Event modifiers in Vue modify how events trigger the running of methods and help us handle events in a more effivient and straightforward way.
+
+Event modifiers are used together with the Vue v-on directive, to for example:
+
+- Prevent the degault submit behavior of HTML forms (v-on:submit.prevent).
+- Make sure that an event can only run once after the page is loaded (v-on:click.once).
+- Specify what keyboard key to use as an event to run a method (v-on:keyup.enter).
+
+How to modify the v-on directive
+Event modifiers are used to difine how to react on an event in more detail.
+
+We use event modifiers by first connecting a tag to an event like we have seen before:
+
+<button v-on:click="createAlert">Create alert</button>
+
+Now, to define more specifically that the button click event should only fire one time after the page loads, we can add the .once modifier, like this:
+
+<button v-on:click.once="createAlert">Create alert</button>
+
+<div id="app">
+  <p>Click the button to create an alert:</p>
+  <button v-on:click.once="createAlert">Create alert</button>
+</div>
+
+<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+<script>
+  const app = Vue.createApp({
+    data() {
+      return {
+        msgAndId: ''
+      }
+    },
+    methods: {
+      createAlert(){
+        alert("Alert created from button click")
+      }
+    }
+  })
+  app.mount('#app')
+</script>
+
+Different v-on modifiers
+Event modifiers are used in different situations. We can use event modifiers when we listen to keyboard events, mouse click events, and we can even use event modifiers in combination with each other.
+
+The event modifier .once can be used after both keyboard and mouse click events.
+
+We have three different keyboard event types keydown, keypress, and keyup.
+
+With each key event type, we can specify exactly what key to listen to after a key event occurs. We have .space, .enter, .w and .up to name a few.
+
+You can write the key event to the web page, or to the console with console.log(event.key), to find the value of a certain key yourself:
+
+<input v-on:keydown="getKey">
+<p> {{ keyValue }} </p>
+
+data() {
+  return {
+    keyValue = ''
+  }
+},
+methods: {
+  getKey(evt){
+    this.keyValue = evt.key
+    console.log(evt.key)
+  }
+}
+
+We can also choose to limit the event to happen only when a mouse click or a key press happens in combination with system modifiers keys .alt, .ctrl, .shift or .meta. The system modifier key .meta represents the Windows key on Windows computers, or command key on Apple computers.
+
+Use the .s modifier to create an alert when the user writes an 's' inside the <textarea> tag.
+
+<div id="app">
+  <p>Try pressing the 's' key:</p>
+  <textarea v-on:keyup.s="createAlert"></textarea>
+</div>
+
+<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+<script>
+  const app = Vue.createApp({
+    data() {
+      return {
+        msgAndId: ''
+      }
+    },
+    methods: {
+      createAlert(){
+        alert("You pressed the 'S' key!")
+      }
+    }
+  })
+  app.mount('#app')
+</script>
+
+Combine keyboard event modifiers
+Use the .s and .ctrl modifiers in combination to create an alert when 's' and 'ctrl' are pressed simultaneously inside the <textearea> tag.
+
+<div id="app">
+  <p>Try pressing the 's' key:</p>
+  <textarea v-on:keyup.ctrl.s="createAlert"></textarea>
+</div>
+
+<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+<script>
+  const app = Vue.createApp({
+    methods: {
+      createAlert(){
+        alert("You pressed the 'S' and 'Ctrl' key, in combination!")
+      }
+    }
+  })
+  app.mount('#app')
+</script>
+
+Mouse button modifiers
+To react on a mouse click, we can write v-on:click, but to specify which mouse button that was clicked, we can use .left, .center or .right modifiers.
+
+Trackpad users: You might need to click with two fingers, or in the lower right hand side of the trackpad on your computer to create a right click.
+
+<div id="app">
+  <div v-on:click.right="changeColor"
+        v-bind:style="{backgroundColor:'hsl('+bgColor+',80%,80%)'}">
+    <p>Press right mouse button here.</p>
+  </div>
+</div>
+
+<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+<script>
+  const app = Vue.createApp({
+    data() {
+      return {
+        bgColor: 0
+      }
+    },
+    methods: {
+      changeColor(){
+        this.bgColor+=50
+      }
+    }
+  })
+  app.mount('#app')
+</script>
+
+Mouse button events can also work in combination with a system modifier key.
+
+<div id="app">
+  <div v-on:click.right.ctrl="changeColor"
+        v-bind:style="{backgroundColor:'hsl('+bgColor+',80%,80%)'}">
+    <p>Press right mouse button here.</p>
+  </div>
+</div>
+
+The event modifier .prevent canbe used in addition to the .right modifier to prevent the default drop-down menu to appear when we right click.
+
+<div id="app">
+  <div v-on:click.right.prevent="changeColor"
+        v-bind:style="{backgroundColor:'hsl('+bgColor+',80%,80%)'}">
+    <p>Press right mouse button here.</p>
+  </div>
+</div>
+
+It would be possible to prevent the drop-down menu from appearing after right click by using event.preventDefault() inside the method, but with the Vue .prevent modifier the code becomes more readable and easier to maintain.
+
+You can also react on left button mouse clicks in combination with other modifiers like click.left.shift:
+
+<div id="app">
+  <p>Hold 'Shift' key and press left mouse button:</p>
+  <img v-on:click.left.shift="changeImg" v-bind:src="imgUrl">
+</div>
+
+<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+<script>
+  const app = Vue.createApp({
+    data() {
+      return {
+        imgUrlIndex: 0,
+        imgUrl:'img_tiger_square.jpeg',
+        imgages: [
+          'img_tiger_square.jpeg',
+          'img_moose_square.jpeg',
+          'img_kangaroo_square.jpeg'
+        ]
+      }
+    },
+    methods: {
+      changeImg(){
+        this.imgUrlIndex++
+        if(this.imgUrlIndex>=3){
+          this.imgUrlIndex=0
+        }
+        this.imgUrl = this.images[this.imgUrlIndex]
+      }
+    }
+  })
+  app.mount('#app')
+</script>
+
+- Vue Forms
+Vue gives us an easy way to improve the user experience with forms by adding extra functionality like responsiveness and from validation.
+
+Vue uses the v-model directive when handling forms.
+
+Our first form with Vue
+In this example we can add new items to a shopping list.
+
+<div id="app">
+  <form v-on:submit.prevent="addItem">
+    <p>Add item</p>
+    <p>Item name: <input type="text" required v-model="itemName"></p>
+    <p>How many: <input type="number" v-model="itemNumber"></p>
+    <button type="submit">Add item</button>
+  </form>
+  <p>Shopping list:</p>
+  <ul>
+    <il v-for="item in shoppingList">{{item.name}}, {{item.number}}</li>
+  </ul>
+</div>
+
+<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+<script>
+  const app = Vue.createApp({
+    data() {
+      return {
+        itemName: null,
+        itemNumber: null,
+        shoppingList: [
+          { name: 'Tomatoes', number: 5 }
+        ]
+      }
+    },
+    methods: {
+      addItem(){
+        let item = {
+          name: this.itemName,
+          number: this.itemNumber
+        }
+        this.shoppingList.push(item)
+        this.itemName = null
+        this.itemNumber = null
+      }
+    }
+  })
+  app.mount('#app')
+</script>
+
+Notice the two-way binding v-model provides in the example above:
+- v-model updates the Vue instance data when the HTML input change.
+- v-model also updates the HTML input when the Vue instance data changes.
+
