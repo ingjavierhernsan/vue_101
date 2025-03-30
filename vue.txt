@@ -269,7 +269,7 @@ We can also display both array element index and information from the array elem
     {{ index }}: "{{ x.name }}", url: "{{ x.url }}" <br>
 </p>
 
-Vue events
+- Vue events
 Event handling in Vue is done with the v-on directive, so that we can make something happen when for example a button is clicked.
 
 Event handling is when HTML elements are set up to run a certain code when a certain event happens.
@@ -318,4 +318,113 @@ If we want to run more complex code when an event occurs we can put the code in 
 
 Event Modifiers
 In addition to v-on and Vue methods we can use something called event modifiers to modify an event so that it for example only happens once after a page is loaded, or modify an event like 'submit' to prevent a form from being submitted.
+
+- Vue v-on directive
+onclick Event
+
+The v-on directive allows us to perform actions based on spercified events.
+Uset v-on:click to perform action when the element is clicked.
+
+<div id="app>
+  <div id="lightDiv">
+    <div v-show="lightOn"></div>
+    <img src="img_lightBulb.svg">
+  </div>
+  <button v-on:click="lightON = !lightOn">Switch light</button>
+</div>
+
+<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+<script>
+  const app = Vue.createApp({
+    data() {
+      return {
+        lightOn: false
+      }
+    }
+  })
+  app.mount('#app')
+</script>
+
+oninput Event
+
+Use v-on:input to perform action when the element gets an input, like a keystroke inside a text field.
+
+<div id="app>
+  <input v-on:input="inpCount++">
+  <p>{{ 'Input events occured: ' + inpCount }}</p>
+</div>
+
+<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+<script>
+  const app = Vue.createApp({
+    data() {
+      return {
+        inpCount: 0
+      }
+    }
+  })
+  app.mount('#app')
+</script>
+
+mousemove Event
+
+Use v-on:mousemove to perform action when the mouse pointer moves over an element.
+
+<div id="app>
+  <p>Move the mouse pointer overthe box below</p>
+  <div v-on:mousemove="colorVal=Math.floor(Math.random()*360)"
+      v-bind:style="{backgroundColor:'hsl('+colorVal+'80%,80%)'}">
+  </div>
+</div>
+
+<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+<script>
+  const app = Vue.createApp({
+    data() {
+      return {
+        colorVal: 50
+      }
+    }
+  })
+  app.mount('#app')
+</script>
+
+Use v-on in a v-for loop
+
+You can also use the v-on directive inside a v-for loop.
+
+The items of the array are available for each iteration inside the v-on value.
+
+<div id="app>
+  <img v-bind:src="imgUrl">
+  <ol>
+    <li v-for="food in manyFoods" v-on:click="imgUrl=food.url">
+      {{ food.name }}
+    </li>
+  </ol>
+</div>
+
+<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+<script>
+  const app = Vue.createApp({
+    data() {
+      return {
+        imgUrl: 'img_salad.svg',
+        manyFoods:[
+          {name: 'Burrito', url: 'img_burrito.svg'},
+          {name: 'Salad', url: 'img_salad.svg'},
+          {name: 'Cake', url: 'img_cake.svg'},
+          {name: 'Soup', url: 'img_soup.svg'},
+        ]
+      }
+    }
+  })
+  app.mount('#app')
+</script>
+
+Shorthand for v-on
+
+The shorthand for 'v-on' is simply '@'.
+
+<button @:click="lihgtOn = !lightOn">Switch light</button>
 
