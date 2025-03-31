@@ -861,3 +861,369 @@ Notice the two-way binding v-model provides in the example above:
 - v-model updates the Vue instance data when the HTML input change.
 - v-model also updates the HTML input when the Vue instance data changes.
 
+- Vue v-model directive
+Compared to normal JavaScript, it is easier to work with forms in Vue because the v-model directive connects with all types of input elements in the same way.
+
+v-model creates a link between the input element value attribute and a data value in the Vue instance. When you change the input, the data updates and when the data changes, the input updates as well (two-way binding).
+
+Two-way binding
+As we have already seen in the shopping list example on the previous page, v-model provides us with a two-way binding, meaning that the form input elements update the Vue data instance, and a change in the Vue instance data updates the inputs.
+
+The example below also demonstrates the two-way binding with v-model.
+
+<div id="app">
+  <input type="text" v-model="inpText">
+  <p> {{ inpText }} </p>
+</div>
+<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+<script>
+  const app = Vue.createApp({
+    data() {
+      return {
+        inpText: 'Initial text'
+      }
+    }
+  })
+  app.mount('#app')
+</script>
+
+Note: The v-model two-way binding functionality could actually be achieved with a combination of v-on:input:
+- v-bind:value to update the input element from the Vue instance data, and v-on:input to update the Vue instance data from the input.
+
+But v-model is much easier to use so that is what we will do.
+
+A dynamic checkbox
+We add a checkbox to our shopping list on the previous page to mark if an item is important or not.
+
+Next to the checkbox we add a text that always reflects the current 'important' status, changing dynamically between true or false.
+
+We use v-model to add this dynamic checkbox and text to improve user interaction.
+
+We need:
+- a boolean value in the Vue instance data property called 'important'.
+- a checkbox where the user can check if the item is important.
+- a dynamic feedback text so that the user can see if the item is important.
+
+Below is how the 'important' feature looks, isolated from the shopping list.
+
+<div id="app">
+  <form>
+    <p>
+      Important item?
+      <label>
+        <input type="checkbox" v-model="important">
+        {{ important }}
+      </label>
+    </p>
+  </form>
+</div>
+<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+<script>
+  const app = Vue.createApp({
+    data() {
+      return {
+        important: false
+      }
+    }
+  })
+  app.mount('#app')
+</script>
+
+Vue CSS binding
+Learn more about how to use v-bind to modify CSS with the style and class attributes.
+
+While the concept to change the style and class attributes with v-bind is fairly straight forward, the sysntax might need some getting used to.
+
+Dynamic CSS in Vue
+You have already seen how we can use Vue to modify CSS by using v-bind on the styly and class attributes. It has been explained briefly in this tutorial under v-bind and several examples with Vue changing CSS has also been given.
+
+Here we will explain in more detail how CSS can be changed dynamically with Vue. But first lets look at two examples with techniques we hace already seen in this tutorial: in-line styling with v-bind:style and assigning a class with v-bind:class.
+
+Inline styling
+We use v-bind:style to do in-line styling in Vue.
+
+<input type="range" v-model="opacityVal">
+<div v-bind:style="{ backgroundColor: 'rgba(155,20,20,'+opacityVal+')' }">
+  Drag the range input above to chane opacity here.
+</div>
+
+Assign a class
+We use v-bind:class to assign a class to an HTML tag in Vue.
+
+<div v-for="(img, index) in images">
+  <img v-bind:src="img.url"
+        v-on:click="select(index)"
+        v-bind:class="{ selClass: img.sel }">
+</div>
+
+Other ways to assign classes and style
+Here aredifferent aspects regarding the use of v-bind:class and v-bind:style that we have not seen before in this tutorial:
+
+1.- When CSS classees are assigned to an HTML tag with both class="" and v-bind:class="" Vue merges the classes.
+2.- An object containing one or more classes is assigned with v-bind:class="{}". Inside the object one or more classes might be toggled on or off.
+3.- With in-line styling (v-bind:style) camelCase is preferred when defining a CSS property, but 'kebab-case' can also be used if it is written inside quoutes.
+4.- CSS classes can be assigned with arrays / with array notation / syntax.
+
+1.-Vue merges 'class' and 'v-bind:class'
+
+<div class="impClass" v-bind:class="{yelClass: isYellow}">
+  This div belongs to both 'impClass' and 'yelClass'.
+</div>
+
+2.- Assign more than one class with 'v-bind:class'
+
+<div v-bind:class="{yelClass: isYellow, impClass: isImportant}">
+  This tag can belong to both the 'impClass' and 'yelClass' classes.
+</div>
+
+3.- Camel case vs kebab case notation with 'v-bind:style'
+
+<div v-bind:style="{ backgroundColor: 'lightpink', 'font-weight': 'bolder' }">
+  This div tag has pink background and bold text.
+</div>
+
+4.- Array syntax with 'v-bind:class'
+
+<div v-bind:class="[{ impClass: isImportant }, 'yelClass' ]">
+  This div tag belongs to one or two classes depending on the isImportant property.
+</div>
+
+- Vue computed properties
+Computed properties are like data properties, except they depend on other properties.
+
+Computed properties are written like methods, but they do not accept any input arguments.
+
+Computed properties are updated automatically when a dependency changes, while methods are called on when something happens, like with event handling for example.
+
+Computed properties are used whtn otputting something that depends on something else.
+
+Computed properties are dynamic
+The big advantage with a computed property is that it is dynamic, meaning it changes depending on for example the value of one or more data properties.
+
+Computed properties is the third configuration option in the Vue instance that we eill learn. The first two configuration options we have already looked at are 'data' and 'methods'.
+
+As with 'data' and 'methods' computed properties also has a reserved name in the Vue instance: 'computed'.
+
+const app = Vue.createApp({
+  data() {
+    ...
+  },
+  computed: {
+    ...
+  },
+  methods: {
+    ...
+  }
+})
+
+Computed property yes or no
+Let's say we want a from to create items in a shoping list, and we want to mark if a new item is important of not. We could add a true or false feedback when the checkbox gets checked, like we have done in an example before:
+
+<input type="checkbox" v-model="chbxVal"> {{ chbxVal }}
+
+data() {
+  return {
+    chbxVal: false
+  }
+}
+
+However, if you ask someone if something is important, they will most likely answer yes or no instead of true or false. So to make our form more fitting with normal language (more intuitive) we should have 'yes' or 'no' as feedback on the checkbox instead of true or false.
+
+And guess what, a computed property is a perfect tool to help us with that.
+
+<input type="checkbox" v-model="chbxVal"> {{ isImportant }}
+
+data() {
+  return {
+    chbxVal: false
+  }
+},
+computed: {
+  isImportant() {
+    if(this.chbxVal){
+      return 'yes'
+    }
+    else {
+      return 'no'
+    }
+  }
+}
+
+Computed properties vs methods
+Computed properties and methods are both written as functions, but they are different:
+
+- Methods runs when called from HTML, but computed properties updates automatically when a dependency change.
+- Computed properties are used the same way we use data properties, but they are dynamic.
+
+- Vue watchers
+A watcher is a method that watches a data property with the same name.
+
+A watcher runs every time the data property value changes.
+
+Use a watcher if a certain data property value requires an action.
+
+The watcher concept
+Watchers is the fourth configuration option in the Vue instance that we will learn. The first three configuration options we have already looked at are 'data', 'methods' and 'computed'.
+
+As with 'data', 'methods' and 'computed' watchers also has a reserved name in the Vue instance: 'watch'.
+
+const app = Vue.createApp({
+  data() {
+    ...
+  },
+  watch: {
+    ...
+  },
+  computed: {
+    ...
+  },
+  methods: {
+    ...
+  }
+})
+
+As mentioned in the green area at the top, a watcher monitors a data property with the same name.
+
+We never call a watcher method. It is only called automatically when the property value changes.
+
+The new property value is always available as an input argument to the watcher method, and so is the old value.
+
+<input type="range" v-model="rangeVal">
+<p>{{ rangeVal }}</p>
+
+const app = Vue.createApp({
+  data() {
+    rangeVal: 70
+  },
+  watch: {
+    rangeVal(val){
+      if(val>20 && val<60){
+        if(val<40){
+          this.rangeVal = 20;
+        }
+        else {
+          this.rangeVal = 60;
+        }
+      }
+    }
+  }
+})
+
+A watcher with new and old value
+In addition to the new property value, the previous property valur is also autonamtically available as an input argument to watcher methods.
+
+We set up click event on a <div> elemtne to record mouse pointer x-postion 'xPos' with a method 'updatePos'. A watcher calculates the difference in pixels between the new x-position and the previous with the use of old and new input arguments to the watcher method.
+
+<div v-on:click="updatePos"></div>
+<p>{{ xDiff }}</p>
+
+const app = Vue.createApp({
+  data() {
+    xPos: 0,
+    xDiff: 0
+  },
+  watch: {
+    xPos(newVal,oldVal){
+      this.xDiff = newVal-oldVal
+    }
+  },
+  methods: {
+    updatePos(evt){
+      this.xPos = evt.offsetX
+    }
+  }
+})
+
+We can also use new and old values to givefeedback to the user the exact moment the input goes from being invalid to valid:
+
+The value from an <input> element is connected to a watcher. If the value includes a @ it is considered a valied e-mail address. The user gets a feedback text to inform if the input is valid, invalid, or if it just got valid with the last keystroke.
+
+<input v-type="email" v-model="inpAddress">
+<p v-bind:class="myClass">{{ feedbackText }}</p>
+
+const ap = Vue.createApp({
+  data() {
+    inpAddress: '',
+    feedbackText: '',
+    myClass: 'invalid'
+  }.
+  watch: {
+    inpAddress(newVal,oldVal){
+      if(!newVal.includes('@')){
+        this.feedbackText = 'The e-mail address is NOT valid';
+        this.myClass = 'invalid';
+      }
+      else if(!oldVal.includes('@') && newVal.includes('@')){
+        this.feedbackText = 'Perfect! You fixed it!';
+        this.myClass = 'valid';
+      }
+      else {
+        this.feedbackText = 'The e-mail address is valid.';
+      }
+    }
+  }
+})
+
+Watchers vs methods
+Watchers and methods are both written as functions, but there are many differences:
+
+- Methods are called from HTML.
+- Methods are often called when and event happens.
+- Methods automatically receives the event object as an input.
+- We can also send other values we choose as an input to a method.
+- Watchers are only called when the watched data property value changes, and this happens automatically.
+- Watchers automatically receives the new and old value from the watched property.
+- We cannot choose to send any other values with a watcher as an input.
+
+Watchers vs computed properties
+Watchers and computed properties are both written as functions.
+
+Watchers and computed properties are both called automatically when a dependncy change, and never called from HTML.
+
+Here are some differences between computed properties and watchers:
+
+- Watchers only depend on one property, the porperty they are set up to watch.
+- Computed properties can depend on many properties.
+- Computed properties are used like data properties, except they are dynamic.
+- Watchers are not referrend to from HTML.
+
+- Vue templates
+A template in Vue is waht we call the HTML part of our Vue application.
+The <template> tag will later be used in *.vue files to structure our code in a better way.
+It is possible to use template as an configuration option in the Vue instance, and put the HTML code inside.
+
+The Vue template
+Let's look at an example where we use template as a configuration option. This is a simple ecample where we have just moved the HTML part into the configuration option template:
+
+The HTML content from insde the <div id="app"> is moved to the configuration option 'template', encapsulated in backtick quotes '...'. We can write man lines of HTML inside a back tick quote.
+
+<div id="app"></div>
+
+<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+<script>
+  const app = Vue.createApp({
+    template:
+    '<h1>{{ message }}</h1>
+    <p>This is a second line of HTML code, inside back tick quotes</p>',
+    data() {
+      return {
+        message: "Hellow World!"
+      }
+    }
+  })
+  app.mount('#app')
+</script>
+
+Single file components (SFCs)
+As you can see in the code example above, alse the HTML part of our Vue application can be gathered inside the Vue instance, but this does not make it easier to get an overview in the HTML file.
+
+To get a better overview, to make it easier to handle larger projects, and to get a better development enviroment, we will now switch to write our Vue code in SFCs, or *.vue files.
+
+All *.vue files only consist of three parts:
+
+- <template> where the HTML content is.
+- <script> for our Vue code.
+- <style> where we write the CSS styling.
+
+But before we can use *.vue files in our project we need to set up our computer in a different way.
+
